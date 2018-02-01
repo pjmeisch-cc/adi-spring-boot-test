@@ -13,7 +13,7 @@ persistentBranches = ["master", "staging", "qa", "production"]
 nonPersistentBranchesTTL = 12 // hours
 
 // the ODP kubernetes cluster to deploy to
-def clusterId = 'ys0m9'
+def clusterId = 'eq5am'
 // from .git folder or per jenkins Env BRANCH_NAME
 def branchName = "unspecified"
 // shortened git branch name
@@ -21,7 +21,7 @@ def simplifiedBranchName
 // will be set later, for  e.g. e2e test
 def deployedUrl
 // kubernetes namespace, lowercase department abbreviation:
-def k8sNamespace = "dof"
+def k8sNamespace = "cfd-dev"
 
 def imageName
 
@@ -45,7 +45,7 @@ def branchKubernetesExpiry(String branchName) {
     unixTimestamp.hoursFromNow(nonPersistentBranchesTTL)
 }
 
-node {
+node('java') {
 
     stage('Prepare') {
         checkout scm
