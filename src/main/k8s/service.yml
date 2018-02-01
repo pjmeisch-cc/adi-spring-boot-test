@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: $LABEL
+  annotations:
+    continuousdelivery.adidas.com/autodelete_branch: $AUTODELETE_BRANCH
+    continuousdelivery.adidas.com/autodelete_repo: $AUTODELETE_REPO
+    prometheus.io/probe: 'true'
+    prometheus.io/probe-path: '/_manage/health'
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: $LABEL
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080

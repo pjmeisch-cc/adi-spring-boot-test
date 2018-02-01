@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="2 seconds">
+    <springProperty name="team" source="spring.application.team"/>
+    <springProperty name="service" source="spring.application.service"/>
+    <springProperty name="application" source="spring.application.name"/>
+    <springProperty name="component" source="spring.application.component"/>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+	    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>false</includeContext>
+            <customFields>{"hostname": "${HOSTNAME}",
+            "team": "${team}",
+            "service": "${service}",
+            "application": "${application}",
+            "component": "${component}",
+            "environment": "${LOG_ENVIRONMENT}",
+            "location": "${LOG_LOCATION}",
+            "my_index": "${application}-${LOG_ENVIRONMENT}",
+            "my_type": "${application}_general-log"}</customFields>
+</encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+</configuration>

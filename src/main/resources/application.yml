@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: springboot-seed
+    team: dof
+    service: DOF
+    component: web-app
+
+ribbon:
+  ServerListRefreshInterval: 1000
+
+# change default management path ("/") to something custom in order to group management endpoints
+management:
+  context-path: /_manage
+  port: 8081
+
+# TODO for production use, actuator endpoints should be secured
+endpoints:
+  # disable all endpoints by default
+  enabled: false
+  # mark all endpoints as sensitive by default
+  sensitive: true
+  # enable relevant endpoints as needed
+  health:
+    enabled: true
+  metrics:
+    enabled: true
+  info:
+    enabled: false
+info:
+  build:
+    artifact: "@project.artifactId@"
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+
+oauth2:
+  # Adidas SSO configuration (DEV environment)
+  adidas-dev:
+    client:
+      # Client configuration created using the OAuth Client Management API
+      # See (https://tools.adidas-group.com/confluence/display/ACRM/OAuth+Client+Management+Wrapper+API%3A+User+Guide)
+      clientId: 968472772940027
+      clientSecret: joonich9wiecaig7EethaiPh0aec5zoji7weejee2loewoo4enahtaj9yeiz
+      # Default configuration for obtaining JWT tokens from PingFederate
+      accessTokenUri: https://dev.pf.adidas.com/as/token.oauth2?access_token_manager_id=jwt
+      userAuthorizationUri: https://dev.pf.adidas.com/as/authorization.oauth2?access_token_manager_id=jwt
+      authenticationScheme: query
+      scope:
+        - pii
+    jwtValidation:
+      # Certificate endpoint from https://tools.adidas-group.com/confluence/display/DEG/Validating+an+Access+Token#ValidatinganAccessToken-RetrievingtheVerificationCertificate
+      # Format: https://<ENV>.pf.adidas.com/ext/oauth/x509 where <ENV> is e.g. dev, stg
+      certificateEndpoint: https://dev.pf.adidas.com/ext/oauth/x509
+      # Expected issuer: https://<ENV>.pf.adidas.com, where <ENV> is e.g. dev, stg
+      expectedIssuer: https://dev.pf.adidas.com
+      allowedClockSkewSeconds: 30
+      requireExpirationDate: true

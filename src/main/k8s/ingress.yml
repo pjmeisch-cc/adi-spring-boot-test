@@ -1,0 +1,20 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: $HOST_NAME_PREFIX.$DOCKER_IMAGE_REPO
+  annotations:
+    continuousdelivery.adidas.com/autodelete_branch: $AUTODELETE_BRANCH
+    continuousdelivery.adidas.com/autodelete_repo: $AUTODELETE_REPO
+spec:
+  backend:
+    serviceName: $LABEL
+    servicePort: 8080
+  rules:
+    - host: $K8S_SERVICE_HOSTNAME
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: $LABEL
+              servicePort: 8080

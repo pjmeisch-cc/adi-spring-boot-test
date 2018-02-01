@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello from Spring Boot Seed</title>
+</head>
+<body onload="getUser()">
+    <header>
+        <div id="login" style="display:none">
+            <a href="/login/adidas-dev">Log in using Adidas SSO (DEV)</a>
+        </div>
+        <div id="logout" style="display:none">
+            Logged in as <span id="user"></span>.
+            <form style="display:inline" method="post" action="/logout">
+                <input type="submit" value="Log out"/>
+            </form>
+        </div>
+        <hr/>
+    </header>
+    <h1>Hello from Spring Boot Seed</h1>
+    <p>This is a simple Spring Boot seed template. You may use it as a starting point for your spring boot app.</p>
+    <p>
+        Find this page <a href="./products/">Products List</a> which uses the data from another service.
+    </p>
+    <p>You can find more information at</p>
+    <ul>
+        <li><a href="https://tools.adidas-group.com/confluence/display/DF/Spring+Boot+Seed">Confluence page</a></li>
+        <li><a href="https://tools.adidas-group.com/bitbucket/projects/DOF/repos/spring-boot-seed/browse">Bitbucket repository</a></li>
+    </ul>
+    <hr/>
+    <footer>
+        Powered by <a href="http://projects.spring.io/spring-boot/">Spring Boot</a>. Built on Jenkins by <a href="https://tools.adidas-group.com/confluence/display/DF/">DevopsFoundation team</a>.
+    </footer>
+    <script>
+        var loginDiv = document.getElementById("login");
+        var logoutDiv = document.getElementById("logout");
+        function showLogout(userName) {
+            loginDiv.style.display = 'none';
+            logoutDiv.style.display = 'block';
+            document.getElementById("user").textContent = userName;
+        }
+        function showLogin() {
+            loginDiv.style.display = 'block';
+            logoutDiv.style.display = 'none';
+        }
+        function getUser() {
+            var loggedInRequest = new XMLHttpRequest();
+            loggedInRequest.open("GET", "/logged-in", true);
+            loggedInRequest.onreadystatechange = function () {
+                if (loggedInRequest.readyState !== 4 || loggedInRequest.status !== 200) {
+                    showLogin();
+                    return;
+                }
+                var loggedIn = JSON.parse(loggedInRequest.responseText);
+                if(loggedIn) {
+                    // fetch user name
+                    var userRequest = new XMLHttpRequest();
+                    userRequest.open("GET", "/user", true);
+                    userRequest.onreadystatechange = function () {
+                        if (loggedInRequest.readyState === 4 && loggedInRequest.status === 200) {
+                            showLogout(userRequest.responseText);
+                        }
+                    };
+                    userRequest.send(null);
+                }
+            };
+            loggedInRequest.send(null);
+        }
+    </script>
+</body>
+</html>
